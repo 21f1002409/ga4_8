@@ -1,0 +1,27 @@
+name: Daily Append Date
+
+permissions:
+  contents: write    
+    
+on:
+  schedule:
+    - cron: '16 21 * * *'
+
+jobs:
+  append-date:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Append date to txt file for daniel.putta@gramener.com
+        run: |
+          echo "$(date)" >> timestamp.txt
+    
+      - name: Commit timestamp.txt
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add timestamp.txt
+          git commit -m "Update timestamp.txt" || echo "No changes to commit"
+          git push
